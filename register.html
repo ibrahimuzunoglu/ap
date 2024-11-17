@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+    <title>login&register</title>
+    <link rel="shortcut icon" href="img/favicon.png" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&amp;display=swap">
+    <link rel="stylesheet" href="css/plugins.css" />
+    <link rel="stylesheet" href="css/style.css" />
+</head>
+<body class="d-flex justify-content-center align-items-center overflow-hidden">
+    <div class="outer-container d-flex flex-column flex-md-row vh-100">
+        <div class="modal-content" style="width: 100%; max-width: 60rem;">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Kayıt Ol</h5>
+            </div>
+            <div class="modal-body">
+                <div class="booking-box">
+                    <div class="booking-inner clearfix">
+                        <form method="post" id="registerForm" class="form1 contact__form clearfix">
+                            <div class="row">
+                                <div class="col-12">
+                                    <div class="alert alert-success contact__msg" style="display: none" role="alert">
+                                        Your message was sent successfully.
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- Form elemanları -->
+                            <div class="row">
+                                <div class="col-12 mb-3">
+                                    <input name="name" id="regUsername" type="text" class="form-control" placeholder="Ad" required>
+                                </div>
+                                <div class="col-12 mb-3">
+                                    <input name="surname" id="regSurname" type="text" class="form-control" placeholder="Soyad" required>
+                                </div>
+                                <div class="col-12 mb-3">
+                                    <input name="email" id="regEmail" type="email" class="form-control" placeholder="Email" required>
+                                </div>
+                                <div class="col-12 mb-3">
+                                    <input name="password" id="regPassword" type="password" class="form-control" placeholder="Şifre" required>
+                                </div>
+                                <div class="col-12 mb-3">
+                                    <input name="phonenumber" id="regPhoneNumber" type="text" class="form-control" placeholder="Telefon Numarası" required>
+                                </div>
+                                <div class="col-12 mb-3">
+                                    <div class="select1_wrapper">
+                                        <label>Şehir Seç</label>
+                                        <div class="select1_inner">
+                                            <select name="location" id="regLocation" class="select2 select form-control" required>
+                                                <option value="">Şehir Seç</option>
+                                                <option value="Dubai">Dubai</option>
+                                                <option value="Abu Dhabi">Abu Dhabi</option>
+                                                <option value="Sharjah">Sharjah</option>
+                                                <option value="Alain">Alain</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-12">
+                                    <button type="submit" class="booking-button mt-2 btn btn-primary w-100">Kayıt Ol</button>
+                                </div>
+                                <a href="login.html">Hesabın Var mı Giriş Yap</a>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <img src="img/slider/29.png" alt="Arka Plan Resmi" class="img-fluid d-none d-md-block" style="flex: 1; height: auto; object-fit: contain;">
+    </div>
+
+    <script src="app.js"></script>
+    <script src="js/jquery-3.7.1.min.js"></script>
+    <script src="js/jquery-migrate-3.4.1.min.js"></script>
+    <script src="js/modernizr-2.6.2.min.js"></script>
+    <script src="js/imagesloaded.pkgd.min.js"></script>
+    <script src="js/jquery.isotope.v3.0.2.js"></script>
+    <script src="js/popper.min.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+    <script src="js/scrollIt.min.js"></script>
+    <script src="js/jquery.waypoints.min.js"></script>
+    <script src="js/owl.carousel.min.js"></script>
+    <script src="js/jquery.stellar.min.js"></script>
+    <script src="js/jquery.magnific-popup.js"></script>
+    <script src="js/select2.js"></script>
+    <script src="js/datepicker.js"></script>
+    <script src="js/YouTubePopUp.js"></script>
+    <script src="js/custom.js"></script>
+</body>
+</html>
