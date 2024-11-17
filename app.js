@@ -11,7 +11,8 @@ document.getElementById('registerForm').addEventListener('submit', async (e) => 
     const location = document.getElementById('regLocation').value;
 
     // Sunucuya POST isteği gönder
-    const response = await fetch('http://localhost:3000/register', {
+    const apiUrl = process.env.NEXT_PUBLIC_API_URL;  // Burada güncel environment variable'ı kullanıyoruz
+    const response = await fetch(`${apiUrl}/api/register`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
@@ -33,7 +34,8 @@ document.getElementById('loginForm').addEventListener('submit', async (e) => {
     console.log(email,password)
 
     // Sunucuya POST isteği gönder
-    const response = await fetch('http://localhost:3000/login', {
+    const apiUrl = process.env.NEXT_PUBLIC_API_URL;  // Burada güncel environment variable'ı kullanıyoruz
+    const response = await fetch(`${apiUrl}/api/login`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
