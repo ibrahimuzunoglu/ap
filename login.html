@@ -48,7 +48,9 @@
             const email = document.getElementById('loginEmail').value;
             const password = document.getElementById('loginPassword').value;
 
-            const response = await fetch('http://localhost:3000/login', {
+            const apiUrl = 'https://ap-wine.vercel.app'; // Vercel URL
+
+            const response = await fetch(`${apiUrl}/api/login`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
