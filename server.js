@@ -39,7 +39,7 @@ const userSchema = new mongoose.Schema({
 
 const User = mongoose.model('User', userSchema);
 
-app.post('/register', async (req, res) => {
+app.post('/api/register', async (req, res) => {
     const { username, surname, email, password, phonenumber, location } = req.body;
     
     try {
@@ -56,7 +56,7 @@ app.post('/register', async (req, res) => {
     }
 });
 
-app.post('/login', async (req, res) => {
+app.post('/api/login', async (req, res) => {
     const { email, password } = req.body;
 
     try {
