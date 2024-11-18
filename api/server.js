@@ -60,24 +60,17 @@ app.post('/api/login', async (req, res) => {
     const { email, password } = req.body;
 
     try {
-        console.log('Gelen istek:', req.body); // Gelen isteği kontrol edin
         const user = await User.findOne({ email, password });
-        console.log('Bulunan kullanıcı:', user); // Sorgu sonucunu kontrol edin
-
         if (user) {
-            const token = jwt.sign({ email }, SECRET_KEY, { expiresIn: '12h' });
-            console.log('Token oluşturuldu:', token); // Token oluşturulup oluşturulmadığını kontrol edin
+            const token = jwt.sign({ email }, SECRET_KEY, { expiresIn: '12h' }); 
             res.json({ message: 'Giriş başarılı!', token });
         } else {
-            console.log('Kullanıcı bulunamadı veya şifre yanlış');
             res.status(400).json({ message: 'Geçersiz email veya şifre!', success: false });
         }
     } catch (error) {
-        console.error('Hata:', error); // Hata mesajını konsola yazdırın
         res.status(500).json({ message: 'Giriş sırasında hata oluştu', error });
     }
 });
-
 
 
 app.get('/cars', async (req, res) => {
