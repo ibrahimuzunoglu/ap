@@ -388,6 +388,17 @@
             }
         });
     </script>
+
+    <script>
+        function handleLoginResponse(response) {
+            if (response.token) {
+                localStorage.setItem('auth_token', response.token); // Token'ı kaydediyoruz
+                window.location.href = 'index.html';  // Kullanıcıyı index sayfasına yönlendiriyoruz
+            } else {
+                alert('Giriş başarısız: ' + response.message);
+            }
+        }
+    </script>
     
     
 
