@@ -1,6 +1,5 @@
 require('dotenv').config(); 
 const express = require('express');
-const serverless = require('serverless-http'); // Serverless dönüşümü için gerekli
 const bodyParser = require('body-parser');
 const cors = require('cors');
 const jwt = require('jsonwebtoken'); 
@@ -15,7 +14,6 @@ const MONGODB_URI = process.env.MONGODB_URI;
 app.use(cors());
 app.use(express.json());
 app.use(bodyParser.json());
-
 
 
 app.use(cors({
@@ -62,20 +60,17 @@ app.post('/api/login', async (req, res) => {
     const { email, password } = req.body;
 
     try {
-        const userSchema = await User.findOne({ email, password }); // Veritabanında kullanıcıyı arar
-        if (userSchema) {
-            const token = jwt.sign({ email: userSchema.email }, process.env.SECRET_KEY, { expiresIn: '12h' });
-            return res.json({ message: 'Giriş başarılı!', token });
+        const user = await User.findOne({ email, password });
+        if (user) {
+            const token = jwt.sign({ email }, SECRET_KEY, { expiresIn: '12h' }); 
+            res.json({ message: 'Giriş başarılı!', token });
         } else {
-            return res.status(401).json({ message: 'Geçersiz email veya şifre!' });
+            res.status(400).json({ message: 'Geçersiz email veya şifre!', success: false });
         }
     } catch (error) {
-        return res.status(500).json({ message: 'Giriş sırasında hata oluştu', error });
+        res.status(500).json({ message: 'Giriş sırasında hata oluştu', error });
     }
 });
-
-module.exports = app;
-module.exports.handler = serverless(app);
 
 
 app.get('/cars', async (req, res) => {
