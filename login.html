@@ -70,46 +70,46 @@
 
     <script>
         document.getElementById('loginForm').addEventListener('submit', async (e) => {
-            e.preventDefault();
-        
-            // Formdan araç bilgilerini al
-            const loginData = {
-                email: document.getElementById('loginEmail').value,
-                password: document.getElementById('loginPassword').value,
-            };
-        
-            // API'ye POST isteği gönder
-            const response = await fetch('http://127.0.0.1:5000/login', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(loginData)
-            });
-        
-            const result = await response.json();
-    
-            if (response.status === 201) {
-                const successMessage = document.getElementById('success-message');
-                successMessage.style.display = 'block';
-    
-            // Mesajın 5 saniye sonra kaybolmasını sağla
-                setTimeout(() => {
-                    successMessage.style.display = 'none';
-                }, 5000);  // 5 saniye sonra kaybolacak
-        }
-    });
-    
-    
-        function getSelectedParts(partType) {
-        const selectedParts = [];
-        // Seçilen tüm check-box'ları al
-        const checkboxes = document.querySelectorAll(`input[name="${partType}"]:checked`);
-        checkboxes.forEach(checkbox => {
-            selectedParts.push(checkbox.value);
+    e.preventDefault(); // Sayfanın yeniden yüklenmesini engeller.
+
+    // Kullanıcıdan alınan veriler
+    const email = document.getElementById('loginEmail').value;
+    const password = document.getElementById('loginPassword').value;
+
+    // API URL'si
+    const apiUrl = 'http://localhost:5000'; // Backend URL'nizi buraya ekleyin.
+
+    try {
+        // API'ye POST isteği gönder
+        const response = await fetch(`${apiUrl}/api/login`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ email, password }),
         });
-        return selectedParts;
+
+        const result = await response.json();
+
+        // Hata mesajını ekrana yazdır
+        const messageElement = document.getElementById('message');
+        messageElement.innerText = result.message;
+        messageElement.classList.remove('text-success', 'text-danger');
+        messageElement.classList.add(response.ok ? 'text-success' : 'text-danger');
+
+        if (response.ok) {
+            // Token'i localStorage'a kaydet
+            localStorage.setItem('token', result.token);
+
+            // Ana sayfaya yönlendirme
+            window.location.href = './index.html';
+        }
+    } catch (error) {
+        console.error('Giriş işlemi sırasında bir hata oluştu:', error);
+        document.getElementById('message').innerText = 'Bir hata oluştu. Lütfen tekrar deneyin.';
+        document.getElementById('message').classList.add('text-danger');
     }
+});
     </script>
 
     <script src="js/jquery-3.7.1.min.js"></script>

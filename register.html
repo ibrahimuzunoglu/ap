@@ -89,5 +89,62 @@
     <script src="js/datepicker.js"></script>
     <script src="js/YouTubePopUp.js"></script>
     <script src="js/custom.js"></script>
+
+    <script>
+        document.getElementById('registerForm').addEventListener('submit', async (e) => {
+            e.preventDefault(); // Sayfanın yeniden yüklenmesini engeller.
+    
+            // Form alanlarındaki verileri alın.
+            const username = document.getElementById('regUsername').value;
+            const surname = document.getElementById('regSurname').value;
+            const email = document.getElementById('regEmail').value;
+            const password = document.getElementById('regPassword').value;
+            const phoneNumber = document.getElementById('regPhoneNumber').value;
+            const location = document.getElementById('regLocation').value;
+    
+            const apiUrl = 'http://127.0.0.1:5000'; // Vercel veya başka bir API URL'si
+    
+            try {
+                // API'ye POST isteği gönder.
+                const response = await fetch(`${apiUrl}/api/register`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        username,
+                        surname,
+                        email,
+                        password,
+                        phoneNumber,
+                        location,
+                    }),
+                });
+    
+                // API cevabını işle.
+                const result = await response.json();
+                
+                // Kullanıcıya mesaj göster.
+                const messageElement = document.querySelector('.contact__msg');
+                if (response.ok) {
+                    messageElement.textContent = 'Kayıt başarılı! Şimdi giriş yapabilirsiniz.';
+                    messageElement.classList.remove('alert-danger');
+                    messageElement.classList.add('alert-success');
+                } else {
+                    messageElement.textContent = result.message || 'Bir hata oluştu.';
+                    messageElement.classList.remove('alert-success');
+                    messageElement.classList.add('alert-danger');
+                }
+                messageElement.style.display = 'block';
+    
+            } catch (error) {
+                // Ağ hatası durumunda.
+                alert('Bir hata oluştu. Lütfen tekrar deneyin.');
+                console.error('Error:', error);
+            }
+        });
+    </script>
+    
+
 </body>
 </html>
