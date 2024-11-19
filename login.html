@@ -112,6 +112,18 @@
 });
     </script>
 
+    
+    <script>
+        function handleLoginResponse(response) {
+            if (response.token) {
+                localStorage.setItem('auth_token', response.token); // Token'ı kaydediyoruz
+                window.location.href = 'index.html';  // Kullanıcıyı index sayfasına yönlendiriyoruz
+            } else {
+                alert('Giriş başarısız: ' + response.message);
+            }
+        }
+    </script>
+
     <script src="js/jquery-3.7.1.min.js"></script>
     <script src="js/jquery-migrate-3.4.1.min.js"></script>
     <script src="js/modernizr-2.6.2.min.js"></script>
