@@ -102,8 +102,9 @@
                             <div class="caption">
                                 <h2>AracımıPazarla.com</h2>
                                 <h5>Yeni nesil araç alım satım platformu </h5>
-                                <a href="" class="button-1 mt-15 mb-15">Bana Araç Pazarla <span class="ti-arrow-top-right"></span></a>
-                                <a href="" data-scroll-nav="1" class="button-2 mt-15 mb-15">Benim Aracımı Pazarla <span class="ti-arrow-top-right"></span></a>
+                                <a href="javascript:void(0);" id="banaAracPazarla" class="button-1 mt-15 mb-15">Bana Araç Pazarla <span class="ti-arrow-top-right"></span></a>
+                                <a href="javascript:void(0);" id="benimAracimiPazarla" class="button-2 mt-15 mb-15">Benim Aracımı Pazarla <span class="ti-arrow-top-right"></span></a>
+
                             </div>
                         </div>
                         <div class="col-lg-4 offset-lg-1 col-md-12">
@@ -336,8 +337,7 @@
     <script src="js/datepicker.js"></script>
     <script src="js/YouTubePopUp.js"></script>
     <script src="js/custom.js"></script>
-    <script>
-        // Token kontrol fonksiyonu
+    <!-- <script>
         function checkLoginAndRedirect(event, link) {
             event.preventDefault(); 
             
@@ -354,13 +354,65 @@
         }
     
         document.querySelector('.button-1').addEventListener('click', function(event) {
-            checkLoginAndRedirect(event, 'buyprice.html'); // Linki buraya ekleyin
+            checkLoginAndRedirect(event, 'buyprice.html');
         });
     
         document.querySelector('.button-2').addEventListener('click', function(event) {
-            checkLoginAndRedirect(event, 'sellprice.html'); // Linki buraya ekleyin
+            checkLoginAndRedirect(event, 'sellprice.html'); 
+        });
+    </script> -->
+
+    <script>
+        // Token'ı localStorage'dan al
+        const token = localStorage.getItem('token');
+    
+        // API isteği atan fonksiyon
+        async function checkAccess() {
+            try {
+                const response = await fetch('http://localhost:5000/api/protected', {
+                    method: 'GET',
+                    headers: {
+                        'Authorization': token
+                    }
+                });
+    
+                if (response.ok) {
+                    const data = await response.json();
+                    console.log('Token doğrulandı:', data);
+                    return true; // Giriş başarılı
+                } else {
+                    const errorData = await response.json();
+                    console.warn('Hata:', errorData.message);
+                    return false; // Giriş başarısız
+                }
+            } catch (error) {
+                console.error('API hatası:', error);
+                return false; // Hata durumunda giriş başarısız
+            }
+        }
+    
+        // Butonlara tıklama olaylarını dinle
+        document.getElementById('banaAracPazarla').addEventListener('click', async (event) => {
+            const hasAccess = await checkAccess();
+            if (hasAccess) {
+                window.location.href = '/bana-arac-pazarla.html'; // İzin verilen sayfaya yönlendir
+            } else {
+                alert('Lütfen önce giriş yapın!');
+                window.location.href = '/login.html'; // Giriş sayfasına yönlendir
+            }
+        });
+    
+        document.getElementById('benimAracimiPazarla').addEventListener('click', async (event) => {
+            const hasAccess = await checkAccess();
+            if (hasAccess) {
+                window.location.href = '/benim-aracimi-pazarla.html'; // İzin verilen sayfaya yönlendir
+            } else {
+                alert('Lütfen önce giriş yapın!');
+                window.location.href = '/login.html'; // Giriş sayfasına yönlendir
+            }
         });
     </script>
+    
     
 
 </body>
