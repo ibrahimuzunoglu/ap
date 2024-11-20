@@ -338,7 +338,7 @@
     <script src="js/YouTubePopUp.js"></script>
     <script src="js/custom.js"></script>
 
-    <script>
+    <!-- <script>
         // Token'ı localStorage'dan al
         const token = localStorage.getItem('token');
     
@@ -387,8 +387,31 @@
                 window.location.href = '/login.html'; // Giriş sayfasına yönlendir
             }
         });
-    </script>
+    </script> -->
 
+    <script>
+        // Token kontrolü ve yönlendirme fonksiyonu
+        function checkLoginAndRedirect(targetPage) {
+            const token = localStorage.getItem('token'); // LocalStorage'dan token al
+    
+            // Eğer token yoksa, login sayfasına yönlendir
+            if (!token) {
+                window.location.href = './login.html'; // Giriş yapmamış kullanıcıyı login sayfasına yönlendir
+            } else {
+                window.location.href = targetPage; // Giriş yapmış kullanıcıyı belirtilen sayfaya yönlendir
+            }
+        }
+    
+        // "Bana Araç Pazarla" butonuna tıklama işlemi
+        document.getElementById('banaAracPazarla').addEventListener('click', () => {
+            checkLoginAndRedirect('./sellprice.html'); // Giriş yapmışsa bu sayfaya yönlendir
+        });
+    
+        // "Benim Aracımı Pazarla" butonuna tıklama işlemi
+        document.getElementById('benimAracimiPazarla').addEventListener('click', () => {
+            checkLoginAndRedirect('./buyprice.html'); // Giriş yapmışsa bu sayfaya yönlendir
+        });
+    </script>
     
     
 
