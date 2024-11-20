@@ -614,7 +614,7 @@
     carDetailSelect.select2();
 
     // Araç markalarını almak için API'ye istek yap
-    fetch('http://localhost:3000/cars')
+    fetch('https://ap-wine.vercel.app/cars')
         .then(response => response.json())
         .then(data => {
             // Araç markalarını drop-down menüsüne ekle
@@ -637,7 +637,7 @@
         carDetailSelect.empty().append('<option value="0">Choose Model Detail</option>'); // Model detaylarını temizle
 
         // Seçilen marka ile ilgili modelleri almak için API'ye tekrar istek yap
-        fetch('http://localhost:3000/cars')
+        fetch('https://ap-wine.vercel.app/cars')
             .then(response => response.json())
             .then(data => {
                 const selectedCar = data.find(car => car.brand === selectedBrand); // Seçilen markaya göre veriyi bul
@@ -664,7 +664,7 @@
         carDetailSelect.empty().append('<option value="0">Choose Model Detail</option>'); // Mevcut seçenekleri temizle
 
         // Seçilen model için detayları yükle
-        fetch('http://localhost:3000/cars')
+        fetch('https://ap-wine.vercel.app/cars')
             .then(response => response.json())
             .then(data => {
                 const selectedCar = data.find(car => car.brand === selectedBrand); // Seçilen markaya göre veriyi bul
