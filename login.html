@@ -41,75 +41,53 @@
         <img src="img/slider/29.png" alt="Arka Plan Resmi" class="img-fluid d-none d-md-block" style="flex: 1; height: auto; object-fit: contain;">
     </div>
 
-    <!-- <script>
+    <script>
+        // Giriş formunun submit olayını dinliyoruz
         document.getElementById('loginForm').addEventListener('submit', async (e) => {
-            e.preventDefault();
-            
-            const email = document.getElementById('loginEmail').value;
-            const password = document.getElementById('loginPassword').value;
-
-            const apiUrl = 'https://ap-wine.vercel.app'; // Vercel URL
-
-            const response = await fetch(`${apiUrl}/api/login`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({ email, password }),
-            });
-
-            const result = await response.json();
-            document.getElementById('message').innerText = result.message;
-
-            if (result.token) {
-                localStorage.setItem('token', result.token);
-                window.location.href = './index.html';
+            e.preventDefault(); // Sayfanın yeniden yüklenmesini engelle
+    
+            // Kullanıcıdan alınan verileri değişkenlere atıyoruz
+            const email = document.getElementById('loginEmail').value.trim();
+            const password = document.getElementById('loginPassword').value.trim();
+    
+            // Backend API URL'si
+            const apiUrl = 'http://localhost:5000'; // Backend URL'nizi burada belirtin.
+    
+            try {
+                // API'ye POST isteği gönderiyoruz
+                const response = await fetch(`${apiUrl}/api/login`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ email, password }), // JSON formatında gönderiyoruz
+                });
+    
+                // Yanıtı JSON olarak işliyoruz
+                const result = await response.json();
+    
+                // Hata veya başarı mesajını ekrana yazdır
+                const messageElement = document.getElementById('message');
+                messageElement.innerText = result.message;
+                messageElement.classList.remove('text-success', 'text-danger');
+                messageElement.classList.add(response.ok ? 'text-success' : 'text-danger');
+    
+                if (response.ok) {
+                    // Giriş başarılıysa, token'i localStorage'a kaydediyoruz
+                    localStorage.setItem('token', result.token);
+    
+                    // Kullanıcıyı ana sayfaya yönlendiriyoruz
+                    window.location.href = './index.html';
+                }
+            } catch (error) {
+                console.error('Giriş işlemi sırasında bir hata oluştu:', error);
+    
+                // Hata mesajını ekrana yazdırıyoruz
+                const messageElement = document.getElementById('message');
+                messageElement.innerText = 'Bir hata oluştu. Lütfen tekrar deneyin.';
+                messageElement.classList.add('text-danger');
             }
         });
-    </script> -->
-
-    <script>
-        document.getElementById('loginForm').addEventListener('submit', async (e) => {
-    e.preventDefault(); // Sayfanın yeniden yüklenmesini engeller.
-
-    // Kullanıcıdan alınan veriler
-    const email = document.getElementById('loginEmail').value;
-    const password = document.getElementById('loginPassword').value;
-
-    // API URL'si
-    const apiUrl = 'http://localhost:5000'; // Backend URL'nizi buraya ekleyin.
-
-    try {
-        // API'ye POST isteği gönder
-        const response = await fetch(`${apiUrl}/api/login`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({ email, password }),
-        });
-
-        const result = await response.json();
-
-        // Hata mesajını ekrana yazdır
-        const messageElement = document.getElementById('message');
-        messageElement.innerText = result.message;
-        messageElement.classList.remove('text-success', 'text-danger');
-        messageElement.classList.add(response.ok ? 'text-success' : 'text-danger');
-
-        if (response.ok) {
-            // Token'i localStorage'a kaydet
-            localStorage.setItem('token', result.token);
-
-            // Ana sayfaya yönlendirme
-            window.location.href = './index.html';
-        }
-    } catch (error) {
-        console.error('Giriş işlemi sırasında bir hata oluştu:', error);
-        document.getElementById('message').innerText = 'Bir hata oluştu. Lütfen tekrar deneyin.';
-        document.getElementById('message').classList.add('text-danger');
-    }
-});
     </script>
 
     
