@@ -396,6 +396,7 @@
     
             // Eğer token yoksa, login sayfasına yönlendir
             if (!token) {
+                alert('Bu sayfayı görüntülemek için giriş yapmalısınız!'); // Uyarı mesajı
                 window.location.href = './login.html'; // Giriş yapmamış kullanıcıyı login sayfasına yönlendir
             } else {
                 window.location.href = targetPage; // Giriş yapmış kullanıcıyı belirtilen sayfaya yönlendir
