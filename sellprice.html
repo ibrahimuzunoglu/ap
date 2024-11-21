@@ -621,94 +621,94 @@
         const modelApiUrl = 'http://127.0.0.1:5000/api/models';
         const detailApiUrl = 'http://127.0.0.1:5000/api/model-details';
       
-        // HTML Elementlerini seçme
+// HTML Elementlerini seçme
         const brandSelect = document.getElementById('car-brand');
         const modelSelect = document.getElementById('car-model');
         const detailSelect = document.getElementById('car-detail');
-      
+
         // Sayfa yüklendiğinde markaları getir
         window.onload = async function () {
-          try {
+            try {
             const response = await fetch(brandApiUrl);
             const data = await response.json();
-      
-            if (response.ok) {
-              populateSelect(brandSelect, data.brands, "Araç Markası");
+
+            if (response.ok && Array.isArray(data.brands)) {
+                populateSelect(brandSelect, data.brands, "Araç Markası");
             } else {
-              console.error("Markaları alırken hata oluştu:", data.error);
+                console.error("Markaları alırken hata oluştu:", data.error || "Geçersiz veri formatı");
             }
-          } catch (error) {
+            } catch (error) {
             console.error("API isteği başarısız:", error);
-          }
+            }
         };
-      
+
         // Marka seçildiğinde modelleri getir
         brandSelect.addEventListener('change', async function () {
-          const selectedBrand = brandSelect.value;
-      
-          if (selectedBrand !== "0") {
+            const selectedBrand = brandSelect.value;
+
+            if (selectedBrand !== "0") {
             try {
-              const response = await fetch(`${modelApiUrl}?brand=${encodeURIComponent(selectedBrand)}`);
-              const data = await response.json();
-      
-              if (response.ok) {
+                const response = await fetch(`${modelApiUrl}?brand=${encodeURIComponent(selectedBrand)}`);
+                const data = await response.json();
+
+                if (response.ok && Array.isArray(data.models)) {
                 populateSelect(modelSelect, data.models, "Araç Modeli");
                 resetSelect(detailSelect, "Model Detayı");
-              } else {
-                console.error("Modelleri alırken hata oluştu:", data.error);
-              }
+                } else {
+                console.error("Modelleri alırken hata oluştu:", data.error || "Geçersiz veri formatı");
+                }
             } catch (error) {
-              console.error("API isteği başarısız:", error);
+                console.error("API isteği başarısız:", error);
             }
-          } else {
+            } else {
             resetSelect(modelSelect, "Araç Modeli");
             resetSelect(detailSelect, "Model Detayı");
-          }
+            }
         });
-      
+
         // Model seçildiğinde detayları getir
         modelSelect.addEventListener('change', async function () {
-          const selectedBrand = brandSelect.value;
-          const selectedModel = modelSelect.value;
-      
-          if (selectedModel !== "0") {
+            const selectedBrand = brandSelect.value;
+            const selectedModel = modelSelect.value;
+
+            if (selectedModel !== "0") {
             try {
-              const response = await fetch(`${detailApiUrl}?brand=${encodeURIComponent(selectedBrand)}&model=${encodeURIComponent(selectedModel)}`);
-              const data = await response.json();
-      
-              if (response.ok) {
+                const response = await fetch(`${detailApiUrl}?brand=${encodeURIComponent(selectedBrand)}&model=${encodeURIComponent(selectedModel)}`);
+                const data = await response.json();
+
+                if (response.ok && Array.isArray(data.details)) {
                 populateSelect(detailSelect, data.details, "Model Detayı");
-              } else {
-                console.error("Detayları alırken hata oluştu:", data.error);
-              }
+                } else {
+                console.error("Detayları alırken hata oluştu:", data.error || "Geçersiz veri formatı");
+                }
             } catch (error) {
-              console.error("API isteği başarısız:", error);
+                console.error("API isteği başarısız:", error);
             }
-          } else {
+            } else {
             resetSelect(detailSelect, "Model Detayı");
-          }
+            }
         });
-      
+
         // Select kutusunu doldurma fonksiyonu
         function populateSelect(selectElement, options, defaultOptionText) {
-          resetSelect(selectElement, defaultOptionText);
-          options.forEach(option => {
+            resetSelect(selectElement, defaultOptionText);
+            options.forEach(option => {
             const opt = document.createElement('option');
             opt.value = option;
             opt.textContent = option;
             selectElement.appendChild(opt);
-          });
+            });
         }
-      
+
         // Select kutusunu sıfırlama fonksiyonu
         function resetSelect(selectElement, defaultOptionText) {
-          selectElement.innerHTML = '';
-          const defaultOption = document.createElement('option');
-          defaultOption.value = "0";
-          defaultOption.textContent = defaultOptionText;
-          selectElement.appendChild(defaultOption);
+            selectElement.innerHTML = '';
+            const defaultOption = document.createElement('option');
+            defaultOption.value = "0";
+            defaultOption.textContent = defaultOptionText;
+            selectElement.appendChild(defaultOption);
         }
-      </script>
+        </script>
 
 
 </body>
