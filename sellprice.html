@@ -602,92 +602,7 @@
     <script src="js/YouTubePopUp.js"></script>
     <script src="js/custom.js"></script>
 
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-    const carBrandSelect = $('#car-brand'); // jQuery ile seçin
-    const carModelSelect = $('#car-model');
-    const carDetailSelect = $('#car-detail');
-
-    // `select2`'yi başlat
-    carBrandSelect.select2();
-    carModelSelect.select2();
-    carDetailSelect.select2();
-
-    // Araç markalarını almak için API'ye istek yap
-    fetch('https://ap-wine.vercel.app/cars')
-        .then(response => response.json())
-        .then(data => {
-            // Araç markalarını drop-down menüsüne ekle
-            data.forEach(car => {
-                const option = new Option(car.brand, car.brand, false, false);
-                carBrandSelect.append(option);
-            });
-
-            // `select2`'yi yeniden başlat
-            carBrandSelect.trigger('change.select2');
-        })
-        .catch(error => {
-            console.error('Verileri alırken hata:', error);
-        });
-
-    // Araç markası seçildiğinde modelleri yükle
-    carBrandSelect.on('change', function() {
-        const selectedBrand = this.value;
-        carModelSelect.empty().append('<option value="0">Choose Car Model</option>'); // Mevcut seçenekleri temizle
-        carDetailSelect.empty().append('<option value="0">Choose Model Detail</option>'); // Model detaylarını temizle
-
-        // Seçilen marka ile ilgili modelleri almak için API'ye tekrar istek yap
-        fetch('https://ap-wine.vercel.app/cars')
-            .then(response => response.json())
-            .then(data => {
-                const selectedCar = data.find(car => car.brand === selectedBrand); // Seçilen markaya göre veriyi bul
-                if (selectedCar) {
-                    // Markaya ait modelleri ekle
-                    Object.keys(selectedCar.models).forEach(model => {
-                        const option = new Option(model, model, false, false);
-                        carModelSelect.append(option);
-                    });
-
-                    // `select2`'yi yeniden başlat
-                    carModelSelect.trigger('change.select2');
-                }
-            })
-            .catch(error => {
-                console.error('Modelleri alırken hata:', error);
-            });
-    });
-
-    // Araç modeli seçildiğinde model detaylarını yükle
-    carModelSelect.on('change', function() {
-        const selectedBrand = carBrandSelect.val();
-        const selectedModel = this.value;
-        carDetailSelect.empty().append('<option value="0">Choose Model Detail</option>'); // Mevcut seçenekleri temizle
-
-        // Seçilen model için detayları yükle
-        fetch('https://ap-wine.vercel.app/cars')
-            .then(response => response.json())
-            .then(data => {
-                const selectedCar = data.find(car => car.brand === selectedBrand); // Seçilen markaya göre veriyi bul
-                if (selectedCar && selectedModel) {
-                    const modelDetails = selectedCar.models[selectedModel]; // Seçilen modelin detaylarını al
-                    if (modelDetails) {
-                        modelDetails.forEach(detail => {
-                            const option = new Option(detail, detail, false, false);
-                            carDetailSelect.append(option);
-                        });
-
-                        // `select2`'yi yeniden başlat
-                        carDetailSelect.trigger('change.select2');
-                    }
-                }
-            })
-            .catch(error => {
-                console.error('Model detaylarını alırken hata:', error);
-            });
-    });
-});
-
-    </script>
+    
     
 
     <script>
@@ -699,6 +614,101 @@
         }
     </script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bodymovin/5.9.6/lottie.min.js"></script>
+
+    <script>
+        // API URL'leri
+        const brandApiUrl = '/api/brands';
+        const modelApiUrl = '/api/models';
+        const detailApiUrl = '/api/model-details';
+      
+        // HTML Elementlerini seçme
+        const brandSelect = document.getElementById('car-brand');
+        const modelSelect = document.getElementById('car-model');
+        const detailSelect = document.getElementById('car-detail');
+      
+        // Sayfa yüklendiğinde markaları getir
+        window.onload = async function () {
+          try {
+            const response = await fetch(brandApiUrl);
+            const data = await response.json();
+      
+            if (response.ok) {
+              populateSelect(brandSelect, data.brands, "Araç Markası");
+            } else {
+              console.error("Markaları alırken hata oluştu:", data.error);
+            }
+          } catch (error) {
+            console.error("API isteği başarısız:", error);
+          }
+        };
+      
+        // Marka seçildiğinde modelleri getir
+        brandSelect.addEventListener('change', async function () {
+          const selectedBrand = brandSelect.value;
+      
+          if (selectedBrand !== "0") {
+            try {
+              const response = await fetch(`${modelApiUrl}?brand=${encodeURIComponent(selectedBrand)}`);
+              const data = await response.json();
+      
+              if (response.ok) {
+                populateSelect(modelSelect, data.models, "Araç Modeli");
+                resetSelect(detailSelect, "Model Detayı");
+              } else {
+                console.error("Modelleri alırken hata oluştu:", data.error);
+              }
+            } catch (error) {
+              console.error("API isteği başarısız:", error);
+            }
+          } else {
+            resetSelect(modelSelect, "Araç Modeli");
+            resetSelect(detailSelect, "Model Detayı");
+          }
+        });
+      
+        // Model seçildiğinde detayları getir
+        modelSelect.addEventListener('change', async function () {
+          const selectedBrand = brandSelect.value;
+          const selectedModel = modelSelect.value;
+      
+          if (selectedModel !== "0") {
+            try {
+              const response = await fetch(`${detailApiUrl}?brand=${encodeURIComponent(selectedBrand)}&model=${encodeURIComponent(selectedModel)}`);
+              const data = await response.json();
+      
+              if (response.ok) {
+                populateSelect(detailSelect, data.details, "Model Detayı");
+              } else {
+                console.error("Detayları alırken hata oluştu:", data.error);
+              }
+            } catch (error) {
+              console.error("API isteği başarısız:", error);
+            }
+          } else {
+            resetSelect(detailSelect, "Model Detayı");
+          }
+        });
+      
+        // Select kutusunu doldurma fonksiyonu
+        function populateSelect(selectElement, options, defaultOptionText) {
+          resetSelect(selectElement, defaultOptionText);
+          options.forEach(option => {
+            const opt = document.createElement('option');
+            opt.value = option;
+            opt.textContent = option;
+            selectElement.appendChild(opt);
+          });
+        }
+      
+        // Select kutusunu sıfırlama fonksiyonu
+        function resetSelect(selectElement, defaultOptionText) {
+          selectElement.innerHTML = '';
+          const defaultOption = document.createElement('option');
+          defaultOption.value = "0";
+          defaultOption.textContent = defaultOptionText;
+          selectElement.appendChild(defaultOption);
+        }
+      </script>
 
 
 </body>
