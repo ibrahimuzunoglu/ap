@@ -643,28 +643,43 @@
         };
 
         // Marka seçildiğinde modelleri getir
-        brandSelect.addEventListener('change', async function () {
+        brandSelect.addEventListener("change", async function () {
             const selectedBrand = brandSelect.value;
 
-            if (selectedBrand !== "0") {
+            if (selectedBrand === "0") {
+                modelSelect.innerHTML = '<option value="0">Araç Modeli</option>';
+                return;
+            }
+
             try {
                 const response = await fetch(`${modelApiUrl}?brand=${encodeURIComponent(selectedBrand)}`);
-                const data = await response.json();
+                if (!response.ok) {
+                throw new Error(`Model API isteği başarısız: ${response.status}`);
+                }
 
-                if (response.ok && Array.isArray(data.models)) {
+                const data = await response.json();
+                console.log("Model verileri:", data);
+
+                if (Array.isArray(data.models)) {
                 populateSelect(modelSelect, data.models, "Araç Modeli");
-                resetSelect(detailSelect, "Model Detayı");
                 } else {
-                console.error("Modelleri alırken hata oluştu:", data.error || "Geçersiz veri formatı");
+                console.error("Beklenmeyen veri formatı:", data);
                 }
             } catch (error) {
-                console.error("API isteği başarısız:", error);
+                console.error("Modelleri alırken hata oluştu:", error);
             }
-            } else {
-            resetSelect(modelSelect, "Araç Modeli");
-            resetSelect(detailSelect, "Model Detayı");
-            }
-        });
+            });
+
+            // Dropdown doldurma fonksiyonu
+            function populateSelect(selectElement, items, defaultText) {
+            selectElement.innerHTML = `<option value="0">${defaultText}</option>`;
+            items.forEach(item => {
+                const option = document.createElement("option");
+                option.value = item;
+                option.textContent = item;
+                selectElement.appendChild(option);
+            });
+        }
 
         // Model seçildiğinde detayları getir
         modelSelect.addEventListener('change', async function () {
