@@ -617,9 +617,9 @@
 
     <script>
     document.addEventListener('DOMContentLoaded', function () {
-        const carBrandSelect = $('#car-brand'); // Marka select öğesi
-        const carModelSelect = $('#car-model'); // Model select öğesi
-        const carDetailSelect = $('#car-detail'); // Detay select öğesi
+        const carBrandSelect = $('#car-brand'); // Marka seçimi için select öğesi
+        const carModelSelect = $('#car-model'); // Model seçimi için select öğesi
+        const carDetailSelect = $('#car-detail'); // Detay seçimi için select öğesi
 
         // `select2` bileşenlerini başlat
         carBrandSelect.select2({ placeholder: "Marka Seçin" });
@@ -627,12 +627,12 @@
         carDetailSelect.select2({ placeholder: "Detay Seçin" });
 
         // Araç markalarını almak için API'ye istek yap
-        fetch('http://127.0.0.1:5000/api/cars') // Flask API URL'sine dikkat edin
+        fetch('http://127.0.0.1:5000/api/cars') // Flask API URL
             .then(response => response.json())
             .then(data => {
-                // Araç markalarını dropdown menüsüne ekle
+                // Markaları dropdown'a ekle
                 data.forEach(car => {
-                    const option = new Option(car.MARKA, car.MARKA, false, false);
+                    const option = new Option(car.brand, car.brand, false, false);
                     carBrandSelect.append(option);
                 });
                 carBrandSelect.trigger('change.select2'); // Select2'yi güncelle
@@ -645,15 +645,16 @@
         carBrandSelect.on('change', function () {
             const selectedBrand = this.value;
             carModelSelect.empty().append('<option></option>'); // Mevcut seçenekleri temizle
-            carDetailSelect.empty().append('<option></option>'); // Detayları da temizle
+            carDetailSelect.empty().append('<option></option>'); // Detayları temizle
 
             // Seçilen markaya göre modelleri bul
             fetch('http://127.0.0.1:5000/api/cars')
                 .then(response => response.json())
                 .then(data => {
-                    const selectedCar = data.find(car => car.MARKA === selectedBrand);
+                    const selectedCar = data.find(car => car.brand === selectedBrand); // Marka eşleşmesini bul
                     if (selectedCar) {
-                        selectedCar.MODELLER.forEach(model => {
+                        // Modelleri ekle
+                        Object.keys(selectedCar.models).forEach(model => {
                             const option = new Option(model, model, false, false);
                             carModelSelect.append(option);
                         });
@@ -670,22 +671,30 @@
             const selectedBrand = carBrandSelect.val();
             const selectedModel = this.value;
 
-            // Detay kısmını temizle
-            carDetailSelect.empty().append('<option></option>');
+            carDetailSelect.empty().append('<option></option>'); // Mevcut detayları temizle
 
-            // Şu an için detay verisi örnek bir yapıdaysa burada doldurulabilir.
-            // Ancak eğer detaylar API'den sağlanıyorsa ilgili endpoint çağrılmalıdır.
-            if (selectedBrand && selectedModel) {
-                // Örneğin, detayları şu an manuel giriyoruz:
-                const details = ['Opsiyon 1', 'Opsiyon 2', 'Opsiyon 3']; // Örnek detaylar
-                details.forEach(detail => {
-                    const option = new Option(detail, detail, false, false);
-                    carDetailSelect.append(option);
+            // Seçilen model için detayları bul
+            fetch('http://127.0.0.1:5000/api/cars')
+                .then(response => response.json())
+                .then(data => {
+                    const selectedCar = data.find(car => car.brand === selectedBrand); // Marka eşleşmesini bul
+                    if (selectedCar && selectedModel) {
+                        const modelDetails = selectedCar.models[selectedModel]; // Seçilen modelin detayları
+                        if (modelDetails) {
+                            modelDetails.forEach(detail => {
+                                const option = new Option(detail, detail, false, false);
+                                carDetailSelect.append(option);
+                            });
+                            carDetailSelect.trigger('change.select2');
+                        }
+                    }
+                })
+                .catch(error => {
+                    console.error('Model detaylarını alırken hata:', error);
                 });
-                carDetailSelect.trigger('change.select2');
-            }
         });
     });
+
     
     </script>
     
