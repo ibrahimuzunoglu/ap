@@ -656,9 +656,11 @@
         function populateModels(selectedBrand) {
             resetSelect(modelSelect, 'Araç Modeli');
             resetSelect(detailSelect, 'Model Detayı');
+            
+            // Seçilen marka için ilgili araç verisini bul
             const car = allCars.find(car => car.brand === selectedBrand);
             if (car) {
-                const models = Object.keys(car.models);
+                const models = Object.keys(car.models); // Modellerin anahtarlarını al
                 models.forEach(model => {
                     const option = document.createElement('option');
                     option.value = model;
@@ -671,9 +673,11 @@
         // Model detaylarını doldur
         function populateDetails(selectedBrand, selectedModel) {
             resetSelect(detailSelect, 'Model Detayı');
+            
+            // Seçilen marka ve model için ilgili araç verisini bul
             const car = allCars.find(car => car.brand === selectedBrand);
             if (car && car.models[selectedModel]) {
-                const details = car.models[selectedModel];
+                const details = car.models[selectedModel]; // Seçilen modelin detaylarını al
                 details.forEach(detail => {
                     const option = document.createElement('option');
                     option.value = detail;
