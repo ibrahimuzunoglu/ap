@@ -627,7 +627,7 @@
         carDetailSelect.select2({ placeholder: "Detay Seçin" });
 
         // Araç markalarını almak için API'ye istek yap
-        fetch('http://localhost:5000/api/cars') // Flask API URL'sine dikkat edin
+        fetch('http://127.0.0.1:5000/api/cars') // Flask API URL'sine dikkat edin
             .then(response => response.json())
             .then(data => {
                 // Araç markalarını dropdown menüsüne ekle
@@ -648,7 +648,7 @@
             carDetailSelect.empty().append('<option></option>'); // Detayları da temizle
 
             // Seçilen markaya göre modelleri bul
-            fetch('http://localhost:5000/api/cars')
+            fetch('http://127.0.0.1:5000/api/cars')
                 .then(response => response.json())
                 .then(data => {
                     const selectedCar = data.find(car => car.MARKA === selectedBrand);
