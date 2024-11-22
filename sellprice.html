@@ -616,101 +616,82 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bodymovin/5.9.6/lottie.min.js"></script>
 
     <script>
-        // HTML Elemanlarını Seç
-        const brandSelect = document.getElementById('car-brand');
-        const modelSelect = document.getElementById('car-model');
-        const detailSelect = document.getElementById('car-detail');
+        const apiEndpoint = "http://127.0.0.1:5000/api/cars";
 
-        // Tüm araç verilerini saklamak için değişken
-        let allCars = [];
+        let carsData = {}; // API'den gelen tüm veriyi saklayacak
 
-        // Sayfa yüklendiğinde tüm verileri API'den al
-        async function fetchCars() {
+        // Sayfa yüklendiğinde markaları getir
+        window.onload = async function () {
             try {
-                const response = await fetch('http://127.0.0.1:5000/api/cars');
-                const data = await response.json();
-                if (response.ok) {
-                    allCars = data;
-                    populateBrands();
+                const response = await fetch(apiEndpoint);
+                carsData = await response.json();
+
+                if (response.ok && carsData.cars) {
+                    populateSelect(document.getElementById("car-brand"), Object.keys(carsData.cars), "Araç Markası Seç");
                 } else {
-                    console.error('Veriler alınırken hata:', data.error);
+                    console.error("API hatası:", carsData.error || "Beklenmedik bir sorun oluştu.");
                 }
             } catch (error) {
-                console.error('API isteği başarısız:', error);
+                console.error("API isteği başarısız:", error);
             }
+        };
+
+        // Marka seçildiğinde modelleri getir
+        function fetchModels() {
+            const brandSelect = document.getElementById("car-brand");
+            const modelSelect = document.getElementById("car-model");
+            const selectedBrand = brandSelect.value;
+
+            if (selectedBrand === "0") {
+                resetSelect(modelSelect, "Araç Modeli Seç");
+                resetSelect(document.getElementById("car-detail"), "Model Detayı Seç");
+                return;
+            }
+
+            // Seçilen markanın modellerini doldur
+            const models = Object.keys(carsData.cars[selectedBrand].models);
+            populateSelect(modelSelect, models, "Araç Modeli Seç");
+            resetSelect(document.getElementById("car-detail"), "Model Detayı Seç");
         }
 
-        // Markaları doldur
-        function populateBrands() {
-            resetSelect(brandSelect, 'Araç Markası');
-            const brands = allCars.map(car => car.brand);
-            brands.forEach(brand => {
-                const option = document.createElement('option');
-                option.value = brand;
-                option.textContent = brand;
-                brandSelect.appendChild(option);
+        // Model seçildiğinde model detaylarını getir
+        function fetchModelDetails() {
+            const brandSelect = document.getElementById("car-brand");
+            const modelSelect = document.getElementById("car-model");
+            const detailSelect = document.getElementById("car-detail");
+
+            const selectedBrand = brandSelect.value;
+            const selectedModel = modelSelect.value;
+
+            if (selectedModel === "0") {
+                resetSelect(detailSelect, "Model Detayı Seç");
+                return;
+            }
+
+            // Seçilen markanın model detaylarını doldur
+            const details = carsData.cars[selectedBrand].models[selectedModel];
+            populateSelect(detailSelect, details, "Model Detayı Seç");
+        }
+
+        // Select kutusunu doldur
+        function populateSelect(selectElement, options, defaultOptionText) {
+            resetSelect(selectElement, defaultOptionText);
+            options.forEach(option => {
+                const opt = document.createElement("option");
+                opt.value = option;
+                opt.textContent = option;
+                selectElement.appendChild(opt);
             });
         }
 
-        // Modelleri doldur
-        function populateModels(selectedBrand) {
-            resetSelect(modelSelect, 'Araç Modeli');
-            resetSelect(detailSelect, 'Model Detayı');
-            const car = allCars.find(car => car.brand === selectedBrand);
-            if (car) {
-                const models = Object.keys(car.models);
-                models.forEach(model => {
-                    const option = document.createElement('option');
-                    option.value = model;
-                    option.textContent = model;
-                    modelSelect.appendChild(option);
-                });
-            }
-        }
-
-        // Model detaylarını doldur
-        function populateDetails(selectedBrand, selectedModel) {
-            resetSelect(detailSelect, 'Model Detayı');
-            const car = allCars.find(car => car.brand === selectedBrand);
-            if (car && car.models[selectedModel]) {
-                const details = car.models[selectedModel];
-                details.forEach(detail => {
-                    const option = document.createElement('option');
-                    option.value = detail;
-                    option.textContent = detail;
-                    detailSelect.appendChild(option);
-                });
-            }
-        }
-
-        // Event Listeners
-        brandSelect.addEventListener('change', () => {
-            const selectedBrand = brandSelect.value;
-            if (selectedBrand !== '0') {
-                populateModels(selectedBrand);
-            }
-        });
-
-        modelSelect.addEventListener('change', () => {
-            const selectedBrand = brandSelect.value;
-            const selectedModel = modelSelect.value;
-            if (selectedModel !== '0') {
-                populateDetails(selectedBrand, selectedModel);
-            }
-        });
-
-        // Select sıfırlama fonksiyonu
+        // Select kutusunu sıfırla
         function resetSelect(selectElement, defaultOptionText) {
-            selectElement.innerHTML = '';
-            const defaultOption = document.createElement('option');
-            defaultOption.value = '0';
+            selectElement.innerHTML = "";
+            const defaultOption = document.createElement("option");
+            defaultOption.value = "0";
             defaultOption.textContent = defaultOptionText;
             selectElement.appendChild(defaultOption);
         }
-
-        // Sayfa yüklendiğinde tüm verileri çek
-        fetchCars();
-
     </script>
 
 
