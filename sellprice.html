@@ -627,7 +627,7 @@
         // Sayfa yüklendiğinde tüm verileri API'den al
         async function fetchCars() {
             try {
-                const response = await fetch('/api/cars');
+                const response = await fetch('http://127.0.0.1:5000/api/cars');
                 const data = await response.json();
                 if (response.ok) {
                     allCars = data;
