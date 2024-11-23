@@ -627,7 +627,7 @@
         carDetailSelect.select2({ placeholder: "Detay Seçin" });
 
         // Araç markalarını almak için API'ye istek yap
-        fetch('http://127.0.0.1:5000/api/cars') // Flask API URL
+        fetch('https://aracimipazarla-api.onrender.com/api/cars') // Flask API URL
             .then(response => response.json())
             .then(data => {
                 // Markaları dropdown'a ekle
@@ -648,7 +648,7 @@
             carDetailSelect.empty().append('<option></option>'); // Detayları temizle
 
             // Seçilen markaya göre modelleri bul
-            fetch('http://127.0.0.1:5000/api/cars')
+            fetch('https://aracimipazarla-api.onrender.com/api/cars')
                 .then(response => response.json())
                 .then(data => {
                     const selectedCar = data.find(car => car.brand === selectedBrand); // Marka eşleşmesini bul
@@ -674,7 +674,7 @@
             carDetailSelect.empty().append('<option></option>'); // Mevcut detayları temizle
 
             // Seçilen model için detayları bul
-            fetch('http://127.0.0.1:5000/api/cars')
+            fetch('https://aracimipazarla-api.onrender.com/api/cars')
                 .then(response => response.json())
                 .then(data => {
                     const selectedCar = data.find(car => car.brand === selectedBrand); // Marka eşleşmesini bul
