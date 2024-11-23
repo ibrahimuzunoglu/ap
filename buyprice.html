@@ -399,91 +399,87 @@
     <script src="js/custom.js"></script>
     
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
-    const carBrandSelect = $('#car-brand'); // jQuery ile seçin
-    const carModelSelect = $('#car-model');
-    const carDetailSelect = $('#car-detail');
-
-    // `select2`'yi başlat
-    carBrandSelect.select2();
-    carModelSelect.select2();
-    carDetailSelect.select2();
-
-    // Araç markalarını almak için API'ye istek yap
-    fetch('http://localhost:3000/cars')
-        .then(response => response.json())
-        .then(data => {
-            // Araç markalarını drop-down menüsüne ekle
-            data.forEach(car => {
-                const option = new Option(car.brand, car.brand, false, false);
-                carBrandSelect.append(option);
-            });
-
-            // `select2`'yi yeniden başlat
-            carBrandSelect.trigger('change.select2');
-        })
-        .catch(error => {
-            console.error('Verileri alırken hata:', error);
-        });
-
-    // Araç markası seçildiğinde modelleri yükle
-    carBrandSelect.on('change', function() {
-        const selectedBrand = this.value;
-        carModelSelect.empty().append('<option value="0">Choose Car Model</option>'); // Mevcut seçenekleri temizle
-        carDetailSelect.empty().append('<option value="0">Choose Model Detail</option>'); // Model detaylarını temizle
-
-        // Seçilen marka ile ilgili modelleri almak için API'ye tekrar istek yap
-        fetch('http://localhost:3000/cars')
-            .then(response => response.json())
-            .then(data => {
-                const selectedCar = data.find(car => car.brand === selectedBrand); // Seçilen markaya göre veriyi bul
-                if (selectedCar) {
-                    // Markaya ait modelleri ekle
-                    Object.keys(selectedCar.models).forEach(model => {
-                        const option = new Option(model, model, false, false);
-                        carModelSelect.append(option);
+        document.addEventListener('DOMContentLoaded', function () {
+            const carBrandSelect = $('#car-brand'); // Marka seçimi için select öğesi
+            const carModelSelect = $('#car-model'); // Model seçimi için select öğesi
+            const carDetailSelect = $('#car-detail'); // Detay seçimi için select öğesi
+    
+            // `select2` bileşenlerini başlat
+            carBrandSelect.select2({ placeholder: "Marka Seçin" });
+            carModelSelect.select2({ placeholder: "Model Seçin" });
+            carDetailSelect.select2({ placeholder: "Detay Seçin" });
+    
+            // Araç markalarını almak için API'ye istek yap
+            fetch('http://127.0.0.1:5000/api/cars') // Flask API URL
+                .then(response => response.json())
+                .then(data => {
+                    // Markaları dropdown'a ekle
+                    data.forEach(car => {
+                        const option = new Option(car.brand, car.brand, false, false);
+                        carBrandSelect.append(option);
                     });
-
-                    // `select2`'yi yeniden başlat
-                    carModelSelect.trigger('change.select2');
-                }
-            })
-            .catch(error => {
-                console.error('Modelleri alırken hata:', error);
+                    carBrandSelect.trigger('change.select2'); // Select2'yi güncelle
+                })
+                .catch(error => {
+                    console.error('Verileri alırken hata:', error);
+                });
+    
+            // Marka seçildiğinde modelleri yükle
+            carBrandSelect.on('change', function () {
+                const selectedBrand = this.value;
+                carModelSelect.empty().append('<option></option>'); // Mevcut seçenekleri temizle
+                carDetailSelect.empty().append('<option></option>'); // Detayları temizle
+    
+                // Seçilen markaya göre modelleri bul
+                fetch('http://127.0.0.1:5000/api/cars')
+                    .then(response => response.json())
+                    .then(data => {
+                        const selectedCar = data.find(car => car.brand === selectedBrand); // Marka eşleşmesini bul
+                        if (selectedCar) {
+                            // Modelleri ekle
+                            Object.keys(selectedCar.models).forEach(model => {
+                                const option = new Option(model, model, false, false);
+                                carModelSelect.append(option);
+                            });
+                            carModelSelect.trigger('change.select2');
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Modelleri alırken hata:', error);
+                    });
             });
-    });
-
-    // Araç modeli seçildiğinde model detaylarını yükle
-    carModelSelect.on('change', function() {
-        const selectedBrand = carBrandSelect.val();
-        const selectedModel = this.value;
-        carDetailSelect.empty().append('<option value="0">Choose Model Detail</option>'); // Mevcut seçenekleri temizle
-
-        // Seçilen model için detayları yükle
-        fetch('http://localhost:3000/cars')
-            .then(response => response.json())
-            .then(data => {
-                const selectedCar = data.find(car => car.brand === selectedBrand); // Seçilen markaya göre veriyi bul
-                if (selectedCar && selectedModel) {
-                    const modelDetails = selectedCar.models[selectedModel]; // Seçilen modelin detaylarını al
-                    if (modelDetails) {
-                        modelDetails.forEach(detail => {
-                            const option = new Option(detail, detail, false, false);
-                            carDetailSelect.append(option);
-                        });
-
-                        // `select2`'yi yeniden başlat
-                        carDetailSelect.trigger('change.select2');
-                    }
-                }
-            })
-            .catch(error => {
-                console.error('Model detaylarını alırken hata:', error);
+    
+            // Model seçildiğinde detayları yükle
+            carModelSelect.on('change', function () {
+                const selectedBrand = carBrandSelect.val();
+                const selectedModel = this.value;
+    
+                carDetailSelect.empty().append('<option></option>'); // Mevcut detayları temizle
+    
+                // Seçilen model için detayları bul
+                fetch('http://127.0.0.1:5000/api/cars')
+                    .then(response => response.json())
+                    .then(data => {
+                        const selectedCar = data.find(car => car.brand === selectedBrand); // Marka eşleşmesini bul
+                        if (selectedCar && selectedModel) {
+                            const modelDetails = selectedCar.models[selectedModel]; // Seçilen modelin detayları
+                            if (modelDetails) {
+                                modelDetails.forEach(detail => {
+                                    const option = new Option(detail, detail, false, false);
+                                    carDetailSelect.append(option);
+                                });
+                                carDetailSelect.trigger('change.select2');
+                            }
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Model detaylarını alırken hata:', error);
+                    });
             });
-    });
-});
-
-    </script>
+        });
+    
+        
+        </script>
 
 
     <script>
