@@ -354,7 +354,7 @@
         // Çıkış yap işlevi
         function logout() {
             // Backend'e çıkış isteği gönder (isteğe bağlı)
-            fetch('/api/logout', {
+            fetch('https://ap-wine.vercel.app/api/logout', {
                 method: 'POST',
                 headers: {
                     'Authorization': token
