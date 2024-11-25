@@ -64,7 +64,7 @@
                 const messageElement = document.getElementById('message');
                 if (response.ok) {
                     localStorage.setItem('token', result.token); // Token'i localStorage'a kaydet
-                    localStorage.setItem("username",result.email);
+                    localStorage.setItem("username",result.username);
                     messageElement.innerText = 'Başarıyla giriş yaptınız!';
                     messageElement.classList.remove('text-danger');
                     messageElement.classList.add('text-success');
