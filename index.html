@@ -342,36 +342,17 @@
     <script src="js/YouTubePopUp.js"></script>
     <script src="js/custom.js"></script>
 
-    <script>
-        // Kullanıcının giriş yapıp yapmadığını kontrol et
-        const token = localStorage.getItem('token');
-        if (token) {
-            document.getElementById('logout-btn').style.display = 'block'; // Çıkış Yap butonunu göster
-            document.querySelector('a[href="login.html"]').style.display = 'none'; // Giriş Yap butonunu gizle
-            document.querySelector('a[href="register.html"]').style.display = 'none'; // Kayıt Ol butonunu gizle
-        }
-    
-        // Çıkış yap işlevi
-        function logout() {
-            // Backend'e çıkış isteği gönder (isteğe bağlı)
-            fetch('https://aracimipazarla-api.onrender.com/api/logout', {
-                method: 'POST',
-                headers: {
-                    'Authorization': token
-                }
-            }).then(response => {
-                if (response.ok) {
-                    alert('Başarıyla çıkış yapıldı!');
-                    localStorage.removeItem('token'); // Token'ı kaldır
-                    window.location.reload(); // Sayfayı yenile
-                } else {
-                    alert('Çıkış yapılamadı.');
-                }
-            });
-        }
-    </script>
 
     <script>
+        function logout() {
+            // localStorage'dan token'ı sil
+            localStorage.removeItem('token');
+    
+            // Kullanıcıyı ana sayfaya yönlendir veya başka bir sayfaya
+            alert('Çıkış yapıldı!');
+            window.location.href = 'index.html'; // Ana sayfaya yönlendir
+        }
+
         // Token kontrolü ve yönlendirme fonksiyonu
         function checkLoginAndRedirect(targetPage) {
             const token = localStorage.getItem('token'); // LocalStorage'dan token al
