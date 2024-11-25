@@ -78,8 +78,8 @@
             <!-- Menu -->
             <div class="collapse navbar-collapse" id="navbar">
                 <ul class="navbar-nav ms-auto">
-                    <li class="nav-item"><a class="nav-link" href="register.html">Kayıt Ol</a></li>
-                    <li class="nav-item"><a class="nav-link" href="login.html">Giriş Yap</a></li>
+                    <li class="nav-item"><a class="nav-link" id="register-btn" href="register.html">Kayıt Ol</a></li>
+                    <li class="nav-item"><a class="nav-link" id="login-btn" href="login.html">Giriş Yap</a></li>
                     <li class="nav-item"> <a class="nav-link" href="index.html" role="button" data-bs-auto-close="outside" aria-expanded="false">Ana Sayfa </i></a>
                     </li>
                     <li class="nav-item"><a class="nav-link" href="about.html">Hakkımızda </a></li>
@@ -87,7 +87,7 @@
                     </li>
                     <li class="nav-item"><a class="nav-link" href="contact.html">İletişim</a></li>
 
-                    <li class="nav-item" id="logout-btn" style="display: visible;">
+                    <li class="nav-item" id="logout-btn" style="display: none;">
                         <a class="nav-link" href="#" onclick="logout()">Çıkış Yap</a>
                     </li>
                 </ul>
@@ -375,6 +375,28 @@
         document.getElementById('benimAracimiPazarla').addEventListener('click', () => {
             checkLoginAndRedirect('./sellprice.html'); // Giriş yapmışsa bu sayfaya yönlendir
         });
+
+
+        window.onload = function() {
+            var token = localStorage.getItem("token"); // Token'ı localStorage'dan al
+            var logoutBtn = document.getElementById("logout-btn"); // Çıkış yap butonunu al
+            var loginBtn = document.getElementById("login-btn"); // Giriş yap butonunu al
+            var registerBtn = document.getElementById("register-btn"); // Kayıt ol butonunu al
+
+            if (token) {
+                // Eğer token varsa, çıkış yap butonunu görünür yap ve diğerlerini gizle
+                logoutBtn.style.display = "block";
+                loginBtn.style.display = "none";
+                registerBtn.style.display = "none";
+            } else {
+                // Eğer token yoksa, çıkış yap butonunu gizle ve diğerlerini görünür yap
+                logoutBtn.style.display = "none";
+                loginBtn.style.display = "block";
+                registerBtn.style.display = "block";
+            }
+        };
+
+
     </script>
     
     
