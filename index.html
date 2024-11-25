@@ -86,6 +86,10 @@
                     <li class="nav-item dropdown"> <a class="nav-link" href="blog3.html" role="button" data-bs-auto-close="outside" aria-expanded="false">Blog</i></a>
                     </li>
                     <li class="nav-item"><a class="nav-link" href="contact.html">İletişim</a></li>
+
+                    <li class="nav-item" id="logout-btn" style="display: none;">
+                        <a class="nav-link" href="#" onclick="logout()">Çıkış Yap</a>
+                    </li>
                 </ul>
             </div>
         </div>
@@ -338,56 +342,34 @@
     <script src="js/YouTubePopUp.js"></script>
     <script src="js/custom.js"></script>
 
-    <!-- <script>
-        // Token'ı localStorage'dan al
+    <script>
+        // Kullanıcının giriş yapıp yapmadığını kontrol et
         const token = localStorage.getItem('token');
-    
-        // API isteği atan fonksiyon
-        async function checkAccess() {
-            try {
-                const response = await fetch('http://localhost:5000/api/protected', {
-                    method: 'GET',
-                    headers: {
-                        'Authorization': token
-                    }
-                });
-    
-                if (response.ok) {
-                    const data = await response.json();
-                    console.log('Token doğrulandı:', data);
-                    return true; // Giriş başarılı
-                } else {
-                    const errorData = await response.json();
-                    console.warn('Hata:', errorData.message);
-                    return false; // Giriş başarısız
-                }
-            } catch (error) {
-                console.error('API hatası:', error);
-                return false; // Hata durumunda giriş başarısız
-            }
+        if (token) {
+            document.getElementById('logout-btn').style.display = 'block'; // Çıkış Yap butonunu göster
+            document.querySelector('a[href="login.html"]').style.display = 'none'; // Giriş Yap butonunu gizle
+            document.querySelector('a[href="register.html"]').style.display = 'none'; // Kayıt Ol butonunu gizle
         }
     
-        // Butonlara tıklama olaylarını dinle
-        document.getElementById('banaAracPazarla').addEventListener('click', async (event) => {
-            const hasAccess = await checkAccess();
-            if (hasAccess) {
-                window.location.href = '/bana-arac-pazarla.html'; // İzin verilen sayfaya yönlendir
-            } else {
-                alert('Lütfen önce giriş yapın!');
-                window.location.href = '/login.html'; // Giriş sayfasına yönlendir
-            }
-        });
-    
-        document.getElementById('benimAracimiPazarla').addEventListener('click', async (event) => {
-            const hasAccess = await checkAccess();
-            if (hasAccess) {
-                window.location.href = '/benim-aracimi-pazarla.html'; // İzin verilen sayfaya yönlendir
-            } else {
-                alert('Lütfen önce giriş yapın!');
-                window.location.href = '/login.html'; // Giriş sayfasına yönlendir
-            }
-        });
-    </script> -->
+        // Çıkış yap işlevi
+        function logout() {
+            // Backend'e çıkış isteği gönder (isteğe bağlı)
+            fetch('/api/logout', {
+                method: 'POST',
+                headers: {
+                    'Authorization': token
+                }
+            }).then(response => {
+                if (response.ok) {
+                    alert('Başarıyla çıkış yapıldı!');
+                    localStorage.removeItem('token'); // Token'ı kaldır
+                    window.location.reload(); // Sayfayı yenile
+                } else {
+                    alert('Çıkış yapılamadı.');
+                }
+            });
+        }
+    </script>
 
     <script>
         // Token kontrolü ve yönlendirme fonksiyonu
