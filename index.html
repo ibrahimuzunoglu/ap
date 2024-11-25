@@ -90,6 +90,9 @@
                     <li class="nav-item" id="logout-btn" style="display: none;">
                         <a class="nav-link" href="#" onclick="logout()">Çıkış Yap</a>
                     </li>
+                    <li class="nav-item" id="username-display" style="display: none;">
+                        <span id="username-text"></span>
+                    </li>
                 </ul>
             </div>
         </div>
@@ -379,6 +382,7 @@
 
         window.onload = function() {
             var token = localStorage.getItem("token"); // Token'ı localStorage'dan al
+            var username = localStorage.getItem("username"); // Kullanıcı adını localStorage'dan al
             var logoutBtn = document.getElementById("logout-btn"); // Çıkış yap butonunu al
             var loginBtn = document.getElementById("login-btn"); // Giriş yap butonunu al
             var registerBtn = document.getElementById("register-btn"); // Kayıt ol butonunu al
@@ -388,6 +392,10 @@
                 logoutBtn.style.display = "block";
                 loginBtn.style.display = "none";
                 registerBtn.style.display = "none";
+                if (username) {
+                    usernameText.textContent = "Hoşgeldiniz, " + username; // Kullanıcı adı metnini ekle
+                    usernameDisplay.style.display = "block"; // Kullanıcı adı öğesini görünür yap
+                }
             } else {
                 // Eğer token yoksa, çıkış yap butonunu gizle ve diğerlerini görünür yap
                 logoutBtn.style.display = "none";
