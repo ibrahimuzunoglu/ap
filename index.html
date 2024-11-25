@@ -90,9 +90,11 @@
                     <li class="nav-item" id="logout-btn" style="display: none;">
                         <a class="nav-link" href="#" onclick="logout()">Çıkış Yap</a>
                     </li>
-                    <li class="nav-item" id="username-display" style="display: visibel;">
+
+                    <li class="nav-item" id="username-display" style="display: none;">
                         <span id="username-text"></span>
                     </li>
+
                 </ul>
             </div>
         </div>
@@ -392,6 +394,7 @@
                 logoutBtn.style.display = "block";
                 loginBtn.style.display = "none";
                 registerBtn.style.display = "none";
+                
                 if (username) {
                     usernameText.textContent = "Hoşgeldiniz, " + username; // Kullanıcı adı metnini ekle
                     usernameDisplay.style.display = "block"; // Kullanıcı adı öğesini görünür yap
@@ -401,6 +404,7 @@
                 logoutBtn.style.display = "none";
                 loginBtn.style.display = "block";
                 registerBtn.style.display = "block";
+                usernameDisplay.style.display = "none";
             }
         };
 
