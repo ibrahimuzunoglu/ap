@@ -352,6 +352,7 @@
         function logout() {
             // localStorage'dan token'ı sil
             localStorage.removeItem('token');
+            localStorage.removeItem('username');
     
             // Kullanıcıyı ana sayfaya yönlendir veya başka bir sayfaya
             alert('Çıkış yapıldı!');
