@@ -482,10 +482,13 @@
         </script>
 
 
-    <script>
+<script>
     document.getElementById('carForm').addEventListener('submit', async (e) => {
         e.preventDefault();
-    
+
+        // LocalStorage'den username'i al
+        const username = localStorage.getItem('username');
+
         // Formdan araç bilgilerini al
         const carData = {
             brand: document.getElementById('car-brand').value,
@@ -497,9 +500,10 @@
             date: document.getElementById('appointment-date').value,
             additionalInfo: document.getElementById('additional-info').value,
             minPrice: document.getElementById('car-price-min').value,
-            maxPrice: document.getElementById('car-price-max').value
+            maxPrice: document.getElementById('car-price-max').value,
+            username: username // LocalStorage'den alınan username'i ekle
         };
-    
+
         // API'ye POST isteği gönder
         const response = await fetch('https://aracimipazarla-api.onrender.com/buysave', {
             method: 'POST',
@@ -508,31 +512,30 @@
             },
             body: JSON.stringify(carData)
         });
-    
+
         const result = await response.json();
 
         if (response.status === 201) {
             const successMessage = document.getElementById('success-message');
             successMessage.style.display = 'block';
 
-        // Mesajın 5 saniye sonra kaybolmasını sağla
+            // Mesajın 5 saniye sonra kaybolmasını sağla
             setTimeout(() => {
                 successMessage.style.display = 'none';
             }, 5000);  // 5 saniye sonra kaybolacak
-    }
-});
-
+        }
+    });
 
     function getSelectedParts(partType) {
-    const selectedParts = [];
-    // Seçilen tüm check-box'ları al
-    const checkboxes = document.querySelectorAll(`input[name="${partType}"]:checked`);
-    checkboxes.forEach(checkbox => {
-        selectedParts.push(checkbox.value);
-    });
-    return selectedParts;
-}
-    </script>
+        const selectedParts = [];
+        // Seçilen tüm check-box'ları al
+        const checkboxes = document.querySelectorAll(`input[name="${partType}"]:checked`);
+        checkboxes.forEach(checkbox => {
+            selectedParts.push(checkbox.value);
+        });
+        return selectedParts;
+    }
+</script>
     
     <script>
         function showAlert() {
