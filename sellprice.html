@@ -536,7 +536,10 @@
     <script>
     document.getElementById('carForm').addEventListener('submit', async (e) => {
         e.preventDefault();
-    
+
+        const username = localStorage.getItem('username');
+
+        
         // Formdan araç bilgilerini al
         const carData = {
             brand: document.getElementById('car-brand').value,
@@ -548,7 +551,8 @@
             date: document.getElementById('appointment-date').value,
             additionalInfo: document.getElementById('additional-info').value,
             paintedParts: getSelectedParts('paintedParts'),
-            changedParts: getSelectedParts('changedParts')
+            changedParts: getSelectedParts('changedParts'),
+            username: username
         };
     
         // API'ye POST isteği gönder
