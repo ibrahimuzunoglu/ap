@@ -32,6 +32,9 @@
             transition: border-color 300ms ease, transform 300ms ease, background-color 300ms ease, color 300ms ease;
             transform-style: preserve-3d;
         }
+        html {
+            scroll-behavior: smooth;
+        }
 
         @media (max-width: 600px) {
             .logo-img {
@@ -82,7 +85,7 @@
                     <li class="nav-item"><a class="nav-link" id="login-btn" href="login.html">Giriş Yap</a></li>
                     <li class="nav-item"> <a class="nav-link" href="index.html" role="button" data-bs-auto-close="outside" aria-expanded="false">Ana Sayfa </i></a>
                     </li>
-                    <li class="nav-item"><a class="nav-link" href="about.html">Hakkımızda </a></li>
+                    <li class="nav-item"><a class="nav-link" href="#about-section">Hakkımızda </a></li>
                     <li class="nav-item dropdown"> <a class="nav-link" href="blog3.html" role="button" data-bs-auto-close="outside" aria-expanded="false">Blog</i></a>
                     </li>
                     <li class="nav-item"><a class="nav-link" href="contact.html">İletişim</a></li>
@@ -195,7 +198,7 @@
             </div>
         </div>
     </section>
-    <section class="about section-padding">
+    <section id="about-section"class="about section-padding">
         <div class="container">
             <div class="row">
                 <div class="col-lg-6 col-md-12 mb-30">
@@ -346,6 +349,16 @@
     <script src="js/datepicker.js"></script>
     <script src="js/YouTubePopUp.js"></script>
     <script src="js/custom.js"></script>
+
+    <script>
+        document.querySelector('.nav-link[href="#about-section"]').addEventListener('click', function (e) {
+    e.preventDefault(); // Varsayılan tıklama davranışını engeller
+    document.querySelector('#about-section').scrollIntoView({
+        behavior: 'smooth', // Yumuşak kaydırma
+        block: 'start' // Bölümü ekranın üst kısmına hizalar
+    });
+});
+    </script>
 
 
     <script>
